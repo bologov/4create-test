@@ -1,4 +1,7 @@
-﻿namespace WebApi;
+﻿using System.Reflection;
+using System.Text.Json.Serialization;
+
+namespace WebApi;
 
 public class Program
 {
@@ -8,10 +11,33 @@ public class Program
 
         // Add services to the container.
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(x =>
+            {
+                x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            var apiAssembly = Assembly.GetExecutingAssembly();
+            options.IncludeXmlComments(GetXmlDocumentationFileFor(apiAssembly));
+
+            var contractsAssembly = typeof(Application.Contracts.CreateCompanyDto).Assembly;
+            options.IncludeXmlComments(GetXmlDocumentationFileFor(contractsAssembly));
+
+            var sharedAssembly = typeof(Domain.Shared.EmployeeTitle).Assembly;
+            options.IncludeXmlComments(GetXmlDocumentationFileFor(sharedAssembly));
+
+            static string GetXmlDocumentationFileFor(Assembly assembly)
+            {
+                var documentationFile = $"{assembly.GetName().Name}.xml";
+                var path = Path.Combine(AppContext.BaseDirectory, documentationFile);
+
+                return path;
+            }
+        });
 
         var app = builder.Build();
 
@@ -25,7 +51,6 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
-
 
         app.MapControllers();
 
