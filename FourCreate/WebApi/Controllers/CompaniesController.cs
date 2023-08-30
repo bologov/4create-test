@@ -1,4 +1,5 @@
-﻿using Application.Contracts;
+﻿using Application.Company;
+using Application.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
@@ -7,8 +8,11 @@ namespace WebApi.Controllers;
 [Route("api/[controller]")]
 public class CompaniesController : ControllerBase
 {
-    public CompaniesController()
+    private readonly ICompanyService _companyService;
+
+    public CompaniesController(ICompanyService companyService)
     {
+        _companyService = companyService;
     }
 
     /// <summary>
@@ -18,13 +22,10 @@ public class CompaniesController : ControllerBase
     /// <returns>Guid of the created company.</returns>
     [HttpPost]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
-    public IActionResult CreateNewCompany(CreateCompanyDto createCompanyDto)
+    public async Task<IActionResult> CreateNewCompany(CreateCompanyDto createCompanyDto)
     {
-        throw new NotImplementedException();
-
-
         // return OK instead of Created as there is no GET endpoints ot generate link to.
-        return Ok();
+        return Ok(await _companyService.CreateCompanyAsync(createCompanyDto));
     }
 }
 

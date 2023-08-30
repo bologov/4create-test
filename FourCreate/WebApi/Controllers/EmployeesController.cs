@@ -1,4 +1,5 @@
 ﻿using Application.Contracts;
+using Application.Employee;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
@@ -7,8 +8,11 @@ namespace WebApi.Controllers;
 [Route("api/[controller]")]
 public class EmployeesController : ControllerBase
 {
-    public EmployeesController()
+    private readonly IEmployeeService _employeeService;
+
+    public EmployeesController(IEmployeeService employeeService)
     {
+        _employeeService = employeeService;
     }
 
     /// <summary>
@@ -18,12 +22,10 @@ public class EmployeesController : ControllerBase
     /// <returns>Guid of the created employee.</returns>
     [HttpPost]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
-    public IActionResult CreateNewEmployee(CreateEmployeeDto createEmployeeDto)
+    public async Task<IActionResult> CreateNewEmployee(CreateEmployeeDto createEmployeeDto)
     {
-        throw new NotImplementedException();
-
         // return OK instead of Created as there is no GET endpoints ot generate link to.
-        return Ok();
+        return Ok(await _employeeService.CreateEmployeeAsync(createEmployeeDto));
     }
 }
 

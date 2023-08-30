@@ -6,4 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Employee\" />
+    <None Remove="Company\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Employee\" />
+    <Folder Include="Company\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Application.Contracts\Application.Contracts.csproj" />
+  </ItemGroup>
 </Project>

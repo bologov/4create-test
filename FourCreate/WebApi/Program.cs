@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.Json.Serialization;
+using Application.Company;
+using Application.Employee;
 
 namespace WebApi;
 
@@ -39,6 +41,8 @@ public class Program
             }
         });
 
+        InitialiseServices(builder.Services, builder.Configuration);
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -55,6 +59,12 @@ public class Program
         app.MapControllers();
 
         app.Run();
+    }
+
+    private static void InitialiseServices(IServiceCollection serviceCollection, IConfiguration configuration)
+    {
+        serviceCollection.AddTransient<IEmployeeService, EmployeeService>();
+        serviceCollection.AddTransient<ICompanyService, CompanyService>();
     }
 }
 
