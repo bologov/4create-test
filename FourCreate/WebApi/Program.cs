@@ -3,7 +3,11 @@ using System.Text.Json.Serialization;
 using Application.Contracts.Company;
 using Application.Contracts.Employee;
 using Application.Services;
+using Common;
+using Data;
 using Domain.Managers;
+using Domain.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi;
 
@@ -43,7 +47,7 @@ public class Program
             }
         });
 
-        InitialiseServices(builder.Services);
+        InitialiseServices(builder.Services, builder.Environment, builder.Configuration);
 
         var app = builder.Build();
 
@@ -63,13 +67,38 @@ public class Program
         app.Run();
     }
 
-    private static void InitialiseServices(IServiceCollection serviceCollection)
+    private static void InitialiseServices(IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
     {
-        serviceCollection.AddScoped<IEmployeeService, EmployeeService>();
-        serviceCollection.AddScoped<ICompanyService, CompanyService>();
+        // Common
+        services.AddScoped<IGuidGenerator, GuidGenerator>();
+        services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 
-        serviceCollection.AddScoped<ICompanyManager, CompanyManager>();
-        serviceCollection.AddScoped<IEmployeeManager, EmployeeManager>();
+        // Application
+        services.AddScoped<IEmployeeService, EmployeeService>();
+        services.AddScoped<ICompanyService, CompanyService>();
+
+        // Domain
+        services.AddScoped<ICompanyManager, CompanyManager>();
+        services.AddScoped<IEmployeeManager, EmployeeManager>();
+
+        // Data
+        services.AddScoped(typeof(IRepository<,>), typeof(DummyRepository<,>));
+
+        var connectionString = configuration.GetConnectionString(nameof(ApplicationDbContext));
+        var serverVersion = ServerVersion.AutoDetect(connectionString);
+
+        services.AddDbContext<ApplicationDbContext>(
+            options =>
+            {
+                options.UseMySql(connectionString, serverVersion);
+
+                if (environment.IsDevelopment())
+                {
+                    options.LogTo(Console.WriteLine, LogLevel.Information)
+                        .EnableSensitiveDataLogging()
+                        .EnableDetailedErrors();
+                }
+            });
     }
 }
 
