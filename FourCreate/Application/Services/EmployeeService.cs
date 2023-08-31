@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Managers;
 using Domain.Repository;
 using Domain.Specification;
+using Domain.UnitOfWork;
 
 namespace Application.Services
 {
@@ -12,13 +13,15 @@ namespace Application.Services
 		private readonly IRepository<Company, Guid> _companyRepository;
 		private readonly IEmployeeManager _employeeManager;
 		private readonly ICompanyManager _companyManager;
+		private readonly IUnitOfWork _unitOfWork;
 
-		public EmployeeService(IRepository<Employee, Guid> employeeRepository, IRepository<Company, Guid> companyRepository, IEmployeeManager employeeManager, ICompanyManager companyManager)
+		public EmployeeService(IRepository<Employee, Guid> employeeRepository, IRepository<Company, Guid> companyRepository, IEmployeeManager employeeManager, ICompanyManager companyManager, IUnitOfWork unitOfWork)
 		{
 			_employeeRepository = employeeRepository;
 			_companyRepository = companyRepository;
 			_employeeManager = employeeManager;
 			_companyManager = companyManager;
+			_unitOfWork = unitOfWork;
 		}
 
         public async Task<Guid> CreateEmployeeAsync(CreateEmployeeDto input)
@@ -40,6 +43,8 @@ namespace Application.Services
 			}
 
             _employeeRepository.Add(employee);
+
+			await _unitOfWork.SaveChangesAsync();
 
             return employee.Id;
 		}

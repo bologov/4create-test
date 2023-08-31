@@ -11,12 +11,14 @@
     <None Remove="Entities\" />
     <None Remove="Repository\" />
     <None Remove="Specification\" />
+    <None Remove="UnitOfWork\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Managers\" />
     <Folder Include="Entities\" />
     <Folder Include="Repository\" />
     <Folder Include="Specification\" />
+    <Folder Include="UnitOfWork\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain.Shared\Domain.Shared.csproj" />

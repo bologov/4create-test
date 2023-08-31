@@ -22,10 +22,12 @@
     <None Remove="Configurations\" />
     <None Remove="Migrations\" />
     <None Remove="Repositories\" />
+    <None Remove="UnitOfWork\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Configurations\" />
     <Folder Include="Migrations\" />
     <Folder Include="Repositories\" />
+    <Folder Include="UnitOfWork\" />
   </ItemGroup>
 </Project>

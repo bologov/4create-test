@@ -6,8 +6,10 @@ using Application.Services;
 using Common;
 using Data;
 using Data.Repositories;
+using Data.UnitOfWork;
 using Domain.Managers;
 using Domain.Repository;
+using Domain.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApi;
@@ -82,9 +84,11 @@ public class Program
         services.AddScoped<ICompanyManager, CompanyManager>();
         services.AddScoped<IEmployeeManager, EmployeeManager>();
 
-        // Data
+        // Data + Domain
         services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+        // Data
         var connectionString = configuration.GetConnectionString(nameof(ApplicationDbContext));
         var serverVersion = ServerVersion.AutoDetect(connectionString);
 
