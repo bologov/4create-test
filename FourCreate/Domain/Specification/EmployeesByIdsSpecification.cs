@@ -12,9 +12,12 @@ namespace Domain.Specification
             _employeeIds = employeeIds;
         }
 
-        public override Expression<Func<Employee, bool>> ToExpression()
+        public override Expression<Func<Employee, bool>> Expression
         {
-            return employee => _employeeIds.Contains(employee.Id);
+            get
+            {
+                return employee => _employeeIds.Contains(employee.Id);
+            }
         }
     }
 }

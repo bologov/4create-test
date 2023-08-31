@@ -25,10 +25,9 @@ namespace Application.Services
 		{
 			var employee = await _employeeManager.CreateEmployee(input.Title.Value, input.Email);
 
-			var companies = (await _companyRepository.FindAsync(new CompaniesByIdsSpecification(input.CompanyIds))).ToList();
+			var companies = (await _companyRepository.FindManyAsync(new CompaniesByIdsSpecification(input.CompanyIds), nameof(Company.Employees))).ToList();
 
 			var missingCompanies = input.CompanyIds.Except(companies.Select(x => x.Id)).ToList();
-
 			if (missingCompanies.Any())
 			{
 				throw new ArgumentException($"Requested companies {string.Join(',', missingCompanies)} were not found.");

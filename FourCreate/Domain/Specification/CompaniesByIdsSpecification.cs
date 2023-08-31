@@ -12,9 +12,12 @@ namespace Domain.Specification
             _companyIds = companyIds;
         }
 
-        public override Expression<Func<Company, bool>> ToExpression()
+        public override Expression<Func<Company, bool>> Expression
         {
-            return company => _companyIds.Contains(company.Id);
+            get
+            {
+                return company => _companyIds.Contains(company.Id);
+            }
         }
     }
 }

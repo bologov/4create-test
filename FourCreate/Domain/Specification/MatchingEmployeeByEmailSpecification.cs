@@ -12,9 +12,12 @@ namespace Domain.Specification
             _email = email;
         }
 
-        public override Expression<Func<Employee, bool>> ToExpression()
+        public override Expression<Func<Employee, bool>> Expression
         {
-            return employee => employee.Email == _email;
+            get
+            {
+                return employee => employee.Email == _email;
+            }
         }
     }
 }

@@ -20,8 +20,7 @@ namespace Domain.Managers
 
         public async Task<Company> CreateCompany(string name)
         {
-            var matchingCompany = await _companyRepository.FindAsync(new MatchingCompanyByNameSpecification(name));
-
+            var matchingCompany = await _companyRepository.FindOrDefaultAsync(new MatchingCompanyByNameSpecification(name));
             if (matchingCompany is not null)
             {
                 throw new ArgumentException($"Company with name {name} already exists in the system");

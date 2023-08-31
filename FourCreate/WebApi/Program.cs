@@ -5,6 +5,7 @@ using Application.Contracts.Employee;
 using Application.Services;
 using Common;
 using Data;
+using Data.Repositories;
 using Domain.Managers;
 using Domain.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -82,7 +83,7 @@ public class Program
         services.AddScoped<IEmployeeManager, EmployeeManager>();
 
         // Data
-        services.AddScoped(typeof(IRepository<,>), typeof(DummyRepository<,>));
+        services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
 
         var connectionString = configuration.GetConnectionString(nameof(ApplicationDbContext));
         var serverVersion = ServerVersion.AutoDetect(connectionString);

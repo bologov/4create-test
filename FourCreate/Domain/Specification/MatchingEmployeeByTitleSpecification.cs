@@ -13,9 +13,12 @@ namespace Domain.Specification
             _title = title;
         }
 
-        public override Expression<Func<Employee, bool>> ToExpression()
+        public override Expression<Func<Employee, bool>> Expression
         {
-            return employee => employee.Title == _title;
+            get
+            {
+                return employee => employee.Title == _title;
+            }
         }
     }
 }

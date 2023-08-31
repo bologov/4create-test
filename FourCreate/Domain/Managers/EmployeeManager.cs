@@ -21,8 +21,7 @@ namespace Domain.Managers
 
         public async Task<Employee> CreateEmployee(EmployeeTitle title, string email)
         {
-            var matchingEmployee = await _employeeRepository.FindAsync(new MatchingEmployeeByEmailSpecification(email));
-
+            var matchingEmployee = await _employeeRepository.FindOrDefaultAsync(new MatchingEmployeeByEmailSpecification(email));
             if (matchingEmployee is not null)
             {
                 throw new ArgumentException($"Employee with email {email} already exists in the system");

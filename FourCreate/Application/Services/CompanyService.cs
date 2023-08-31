@@ -30,7 +30,7 @@ namespace Application.Services
 
             if (existingEmployeeIds.Any())
             {
-                var existingEmployees = await _employeeRepository.FindAsync(new EmployeesByIdsSpecification(existingEmployeeIds));
+                var existingEmployees = await _employeeRepository.FindManyAsync(new EmployeesByIdsSpecification(existingEmployeeIds));
 
                 var missingEmployees = existingEmployeeIds.Except(existingEmployees.Select(x => x.Id)).ToList();
                 if (missingEmployees.Any())
