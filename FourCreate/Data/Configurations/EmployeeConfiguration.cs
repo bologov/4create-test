@@ -1,6 +1,5 @@
 ﻿using Domain.Entities;
 using Domain.Shared;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -21,7 +20,6 @@ namespace Data.Configurations
                 .IsRequired();
 
             builder.Property(x => x.CreatedAt)
-                .HasColumnType("datetime2")
                 .IsRequired();
 
             builder.HasIndex(x => x.Email).IsUnique();

@@ -12,11 +12,9 @@ namespace Data.Configurations
 
             builder.Property(x => x.Name)
                 .HasMaxLength(255)
-                .IsRequired()
-                .IsUnicode();
+                .IsRequired();
 
             builder.Property(x => x.CreatedAt)
-                .HasColumnType("datetime2")
                 .IsRequired();
 
             builder.HasIndex(x => x.Name).IsUnique();

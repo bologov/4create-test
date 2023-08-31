@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using System.Reflection;
+using Data.Configurations;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data
@@ -11,7 +13,11 @@ namespace Data
 
 		public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base (options)
 		{
+		}
 
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 		}
 	}
 }
