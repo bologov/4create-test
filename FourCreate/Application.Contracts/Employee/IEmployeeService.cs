@@ -1,6 +1,4 @@
-﻿using Application.Contracts;
-
-namespace Application.Employee
+﻿namespace Application.Contracts.Employee
 {
 	public interface IEmployeeService
 	{

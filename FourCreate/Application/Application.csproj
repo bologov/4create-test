@@ -7,14 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Employee\" />
-    <None Remove="Company\" />
+    <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Employee\" />
-    <Folder Include="Company\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Application.Contracts\Application.Contracts.csproj" />
+    <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 </Project>

@@ -10,4 +10,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain.Shared\Domain.Shared.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Company\" />
+    <None Remove="Employee\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Company\" />
+    <Folder Include="Employee\" />
+  </ItemGroup>
 </Project>

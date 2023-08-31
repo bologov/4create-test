@@ -1,6 +1,4 @@
-﻿using Application.Contracts;
-
-namespace Application.Company
+﻿namespace Application.Contracts.Company
 {
 	public interface ICompanyService
 	{

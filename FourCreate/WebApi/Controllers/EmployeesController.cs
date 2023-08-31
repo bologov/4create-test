@@ -1,5 +1,4 @@
-﻿using Application.Contracts;
-using Application.Employee;
+﻿using Application.Contracts.Employee;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;

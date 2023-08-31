@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 using System.Text.Json.Serialization;
-using Application.Company;
-using Application.Employee;
+using Application.Contracts.Company;
+using Application.Contracts.Employee;
+using Application.Services;
+using Domain.Managers;
 
 namespace WebApi;
 
@@ -26,7 +28,7 @@ public class Program
             var apiAssembly = Assembly.GetExecutingAssembly();
             options.IncludeXmlComments(GetXmlDocumentationFileFor(apiAssembly));
 
-            var contractsAssembly = typeof(Application.Contracts.CreateCompanyDto).Assembly;
+            var contractsAssembly = typeof(Application.Contracts.Company.CreateCompanyDto).Assembly;
             options.IncludeXmlComments(GetXmlDocumentationFileFor(contractsAssembly));
 
             var sharedAssembly = typeof(Domain.Shared.EmployeeTitle).Assembly;
@@ -41,7 +43,7 @@ public class Program
             }
         });
 
-        InitialiseServices(builder.Services, builder.Configuration);
+        InitialiseServices(builder.Services);
 
         var app = builder.Build();
 
@@ -61,10 +63,13 @@ public class Program
         app.Run();
     }
 
-    private static void InitialiseServices(IServiceCollection serviceCollection, IConfiguration configuration)
+    private static void InitialiseServices(IServiceCollection serviceCollection)
     {
-        serviceCollection.AddTransient<IEmployeeService, EmployeeService>();
-        serviceCollection.AddTransient<ICompanyService, CompanyService>();
+        serviceCollection.AddScoped<IEmployeeService, EmployeeService>();
+        serviceCollection.AddScoped<ICompanyService, CompanyService>();
+
+        serviceCollection.AddScoped<ICompanyManager, CompanyManager>();
+        serviceCollection.AddScoped<IEmployeeManager, EmployeeManager>();
     }
 }
 
