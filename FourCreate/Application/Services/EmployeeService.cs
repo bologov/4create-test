@@ -27,20 +27,15 @@ namespace Application.Services
 
         public async Task<Guid> CreateEmployeeAsync(CreateEmployeeDto input)
 		{
-			var employee = await _employeeManager.CreateEmployee(input.Title.Value, input.Email);
+			var employee = await _employeeManager.CreateEmployeeAsync(input.Title!.Value, input.Email!);
 
-			var companies = (await _companyRepository.FindManyAsync(new CompaniesByIdsSpecification(input.CompanyIds), nameof(Company.Employees))).ToList();
+			var companies = (await _companyRepository.FindManyAsync(new CompaniesByIdsSpecification(input.CompanyIds!), nameof(Company.Employees))).ToList();
 
-			var missingCompanies = input.CompanyIds.Except(companies.Select(x => x.Id)).ToList();
-			if (missingCompanies.Any())
-			{
-				throw new BusinessException($"Companies {string.Join(',', missingCompanies)} do not exist in the system.");
-			}
+			CheckCompaniesForExistence(input.CompanyIds, companies.Select(x => x.Id).ToArray());
 
 			foreach (var company in companies)
 			{
 				_companyManager.AddEmployee(company, employee);
-				_companyRepository.Update(company);
 			}
 
             _employeeRepository.Add(employee);
@@ -49,6 +44,15 @@ namespace Application.Services
 
             return employee.Id;
 		}
+
+        private static void CheckCompaniesForExistence(Guid[] requestedCompanyIds, Guid[] fetchedCompanyIds)
+        {
+            var missingCompanies = requestedCompanyIds.Except(fetchedCompanyIds).ToList();
+            if (missingCompanies.Any())
+            {
+                throw new BusinessException($"Companies {string.Join(',', missingCompanies)} do not exist in the system.");
+            }
+        }
     }
 }
 

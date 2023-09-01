@@ -6,7 +6,7 @@ namespace Domain.Managers
 {
 	public interface IEmployeeManager
 	{
-		Task<Employee> CreateEmployee(EmployeeTitle title, string email);
+		Task<Employee> CreateEmployeeAsync(EmployeeTitle title, string email);
 	}
 }
 
