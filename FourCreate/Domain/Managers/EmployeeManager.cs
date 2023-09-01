@@ -1,5 +1,6 @@
 ﻿using Common;
 using Domain.Entities;
+using Domain.Exceptions;
 using Domain.Repository;
 using Domain.Shared;
 using Domain.Specification;
@@ -24,7 +25,7 @@ namespace Domain.Managers
             var matchingEmployee = await _employeeRepository.FindOrDefaultAsync(new MatchingEmployeeByEmailSpecification(email));
             if (matchingEmployee is not null)
             {
-                throw new ArgumentException($"Employee with email {email} already exists in the system");
+                throw new BusinessException($"Employee with email {email} already exists in the system.");
             }
 
             var guid = _guidGenerator.GenerateGuid();

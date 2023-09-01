@@ -21,6 +21,7 @@ public class CompaniesController : ControllerBase
     /// <returns>Guid of the created company.</returns>
     [HttpPost]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateNewCompany(CreateCompanyDto createCompanyDto)
     {
         // return OK instead of Created as there is no GET endpoints ot generate link to.

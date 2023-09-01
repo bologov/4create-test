@@ -1,5 +1,7 @@
-﻿using Common;
+﻿using System.Xml.Linq;
+using Common;
 using Domain.Entities;
+using Domain.Exceptions;
 using Domain.Repository;
 using Domain.Specification;
 
@@ -23,7 +25,7 @@ namespace Domain.Managers
             var matchingCompany = await _companyRepository.FindOrDefaultAsync(new MatchingCompanyByNameSpecification(name));
             if (matchingCompany is not null)
             {
-                throw new ArgumentException($"Company with name {name} already exists in the system");
+                throw new BusinessException($"Company with the same name already exists in the system - {matchingCompany.Id}.");
             }
 
             var guid = _guidGenerator.GenerateGuid();
@@ -39,7 +41,7 @@ namespace Domain.Managers
             var matchingTitleEmployee = company.Employees.Where(spec.IsSatisfiedBy).FirstOrDefault();
             if (matchingTitleEmployee is not null)
             {
-                throw new ArgumentException($"Cannot add employee {employee.Email} with title {employee.Title} to company {company.Name} as it already has an employee with the same title - {matchingTitleEmployee.Title}");
+                throw new BusinessException($"Cannot add employee with title {employee.Title} to company {company.Name} as it already has an employee with the same title - {matchingTitleEmployee.Email}.");
             }
 
             company.Employees.Add(employee);

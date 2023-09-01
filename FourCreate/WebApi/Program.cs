@@ -7,9 +7,11 @@ using Common;
 using Data;
 using Data.Repositories;
 using Data.UnitOfWork;
+using Domain.Exceptions;
 using Domain.Managers;
 using Domain.Repository;
 using Domain.UnitOfWork;
+using Hellang.Middleware.ProblemDetails;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApi;
@@ -50,9 +52,11 @@ public class Program
             }
         });
 
-        InitialiseServices(builder.Services, builder.Environment, builder.Configuration);
+        ConfigureServices(builder.Services, builder.Environment, builder.Configuration);
 
         var app = builder.Build();
+
+        app.UseProblemDetails();
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
@@ -70,9 +74,21 @@ public class Program
         app.Run();
     }
 
-    private static void InitialiseServices(IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
+    private static void ConfigureServices(IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
     {
         // Common
+        services.AddProblemDetails(options =>
+        {
+            // by using mapping, business exception is converted into 409 Conflict response
+            options.Map<BusinessException>((ctx, ex) =>
+            {
+                var factory = ctx.RequestServices.GetRequiredService<ProblemDetailsFactory>();
+
+                // by using custom mapping, ex.Message is preserved as detail on the response in production mode.
+                return factory.CreateProblemDetails(ctx, StatusCodes.Status409Conflict, detail: ex.Message);
+
+            });
+        });
         services.AddScoped<IGuidGenerator, GuidGenerator>();
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 

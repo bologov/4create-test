@@ -1,5 +1,6 @@
 ﻿using Application.Contracts.Employee;
 using Domain.Entities;
+using Domain.Exceptions;
 using Domain.Managers;
 using Domain.Repository;
 using Domain.Specification;
@@ -33,7 +34,7 @@ namespace Application.Services
 			var missingCompanies = input.CompanyIds.Except(companies.Select(x => x.Id)).ToList();
 			if (missingCompanies.Any())
 			{
-				throw new ArgumentException($"Requested companies {string.Join(',', missingCompanies)} were not found.");
+				throw new BusinessException($"Companies {string.Join(',', missingCompanies)} do not exist in the system.");
 			}
 
 			foreach (var company in companies)

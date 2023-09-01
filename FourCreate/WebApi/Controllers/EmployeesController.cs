@@ -21,6 +21,7 @@ public class EmployeesController : ControllerBase
     /// <returns>Guid of the created employee.</returns>
     [HttpPost]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
     public async Task<IActionResult> CreateNewEmployee(CreateEmployeeDto createEmployeeDto)
     {
         // return OK instead of Created as there is no GET endpoints ot generate link to.
