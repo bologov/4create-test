@@ -2,24 +2,20 @@
 
 namespace Domain.Entities
 {
-	public class Employee : Entity<Guid>, IAuditedEntity
+	public class Employee : Entity<Guid>
 	{
-		public Employee(Guid id, EmployeeTitle title, string email, DateTime createdAt)
+		public Employee(Guid id, EmployeeTitle title, string email, DateTime createdAt) : base(id, createdAt)
 		{
-			Id = id;
 			Title = title;
 			Email = email;
-			CreatedAt = createdAt;
 			Companies = new List<Company>();
 		}
 
-		public EmployeeTitle Title { get; private set; }
+		public EmployeeTitle Title { get; init; }
 
-		public string Email { get; private set; }
+		public string Email { get; init; }
 
-		public DateTime CreatedAt { get; private set; }
-
-		public ICollection<Company> Companies { get; private set; }
+		public ICollection<Company> Companies { get; init; }
 	}
 }
 
