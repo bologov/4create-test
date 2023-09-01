@@ -16,7 +16,8 @@ namespace Domain.Specification
         {
             get
             {
-                return company => company.Name == _name;
+                // email field is case insensitive in the db, so toLower is to be used for checks at .NET
+                return company => company.Name.ToLower() == _name.ToLower();
             }
         }
     }
