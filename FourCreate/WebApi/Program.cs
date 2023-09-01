@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Application.Contracts.Company;
 using Application.Contracts.Employee;
 using Application.Services;
+using Application.Validators;
 using Common;
 using Data;
 using Data.Repositories;
@@ -11,8 +12,10 @@ using Domain.Exceptions;
 using Domain.Managers;
 using Domain.Repository;
 using Domain.UnitOfWork;
+using FluentValidation;
 using Hellang.Middleware.ProblemDetails;
 using Microsoft.EntityFrameworkCore;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 namespace WebApi;
 
@@ -89,10 +92,12 @@ public class Program
 
             });
         });
+        services.AddFluentValidationAutoValidation();
         services.AddScoped<IGuidGenerator, GuidGenerator>();
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 
         // Application
+        services.AddValidatorsFromAssemblyContaining<CreateCompanyDtoValidator>();
         services.AddScoped<IEmployeeService, EmployeeService>();
         services.AddScoped<ICompanyService, CompanyService>();
 
