@@ -52,7 +52,7 @@ namespace Data
         private void ProcessChangedEntityEntries(SystemLogBuilder builder, EntityEntry entry)
         {
             builder.ResourceType = entry.Entity.GetType().Name;
-            // there are potentially types with composite primary key, so they would require multiple fields to be stored.
+            // potentially there are types with a composite primary key, so they would require multiple fields to be stored.
             builder.ResourceId = entry.Properties.SingleOrDefault(x => x.Metadata.IsPrimaryKey()).CurrentValue;
             builder.CreatedAt = _dateTimeProvider.GetUtcDateTimeNow();
 
@@ -78,6 +78,13 @@ namespace Data
                 if (entry.State == EntityState.Modified && !property.IsModified)
                 {
                     continue;
+                }
+
+                // write down unique index value - it can't be th primary key as it was skipped
+                // there are potentially could be multiple unique indexes - but it isn't the case for now.
+                if (property.Metadata.IsUniqueIndex())
+                {
+                    builder.ResourceUniqueValue = property.CurrentValue;
                 }
 
                 var originalValue = entry.State != EntityState.Added ? property.OriginalValue : null;

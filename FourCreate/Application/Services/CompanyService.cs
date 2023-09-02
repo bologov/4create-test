@@ -57,7 +57,6 @@ namespace Application.Services
             foreach (var existingEmployee in employees)
             {
                 _companyManager.AddEmployee(company, existingEmployee);
-                _employeeRepository.Update(existingEmployee);
             }
         }
 

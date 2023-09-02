@@ -13,7 +13,7 @@ namespace Domain.Entities
 
 		public EmployeeTitle Title { get; init; }
 
-		public string Email { get; init; }
+        public string Email { get; init; }
 
 		public ICollection<Company> Companies { get; init; }
 	}
