@@ -1,0 +1,22 @@
+﻿
+services:
+  api:
+    build: . # build the Docker image
+    container_name: "4create-test-api"
+    ports:
+      - "7120:80"
+    depends_on:
+      - mysql
+    restart: on-failure
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
+      - ConnectionStrings__ApplicationDbContext=server=4create-test-mysql;port=3306;user=root;password=p4ssw0rd;database=ApplicationDb
+
+
+  mysql:
+    image: "mysql:latest"
+    container_name: "4create-test-mysql"
+    ports:
+      - "33061:3306" # 33061 - to access from outside
+    environment:
+      - MYSQL_ROOT_PASSWORD=p4ssw0rd

@@ -66,6 +66,8 @@ public class Program
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+            // create db if not exists only in development mode!
+            SetupDb();
         }
 
         app.UseHttpsRedirection();
@@ -75,6 +77,14 @@ public class Program
         app.MapControllers();
 
         app.Run();
+
+        void SetupDb()
+        {
+            using var serviceScope = (app as IApplicationBuilder).ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+
+            var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            context.Database.EnsureCreated();
+        }
     }
 
     private static void ConfigureServices(IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
