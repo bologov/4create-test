@@ -39,5 +39,7 @@ Application- and Domain-level:
 4. The command will build a docker image from the API solution and will start a container with it as well as an instance of MySQL server.
 
 There is a [Postman collection](https://github.com/bologov/4create-test/blob/main/4create-test.postman_collection.json) available in the solution root.
+
 Swagger UI would be accessible at http://localhost:7120/swagger/index.html
+
 MySQL instance would be accessible at localhost:33061  (password is p4ssw0rd and the user is root).
